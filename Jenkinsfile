@@ -21,6 +21,7 @@ pipeline {
 
     environment {
         CHART_PATH = 'simple-web'
+        KUBECONFIG = '/home/azureuser/.kube/config'
     }
 
     stages {
