@@ -1,0 +1,40 @@
+image:
+  registry: acrinterview.azurecr.io
+  repository: simple-web
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingress:
+  className: nginx
+  path: /itay
+  pathType: Prefix
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+keda:
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  cooldownPeriod: 300
+  pollingInterval: 30
+  cpu:
+    metricType: Utilization
+    value: "80"
+  memory:
+    metricType: Utilization
+    value: "80"
+  schedule:
+    timezone: "UTC"
+    start: "0 8 * * *"
+    end: "0 0 * * *"
+    desiredReplicas: "2"

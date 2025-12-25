@@ -1,0 +1,28 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: simple-web
+  labels:
+    app: simple-web
+spec:
+  scaleTargetRef:
+    name: simple-web
+  minReplicaCount: {{ .Values.keda.minReplicaCount }}
+  maxReplicaCount: {{ .Values.keda.maxReplicaCount }}
+  pollingInterval: {{ .Values.keda.pollingInterval }}
+  cooldownPeriod: {{ .Values.keda.cooldownPeriod }}
+  triggers:
+    - type: cpu
+      metricType: {{ .Values.keda.cpu.metricType }}
+      metadata:
+        value: {{ .Values.keda.cpu.value | quote }}
+    - type: memory
+      metricType: {{ .Values.keda.memory.metricType }}
+      metadata:
+        value: {{ .Values.keda.memory.value | quote }}
+    - type: cron
+      metadata:
+        timezone: {{ .Values.keda.schedule.timezone }}
+        start: {{ .Values.keda.schedule.start }}
+        end: {{ .Values.keda.schedule.end }}
+        desiredReplicas: {{ .Values.keda.schedule.desiredReplicas | quote }}
